@@ -1,0 +1,97 @@
+from abc import ABC, abstractmethod
+
+class Bebida(ABC):
+    descricao = "Bebida abstrata"
+
+    def get_descricao(self):
+        return self.descricao
+
+    @abstractmethod
+    def custo(self):
+        pass
+
+class Expresso(Bebida):
+    def __init__(self):
+        self.descricao = "Expresso"
+    def custo(self):
+        return 5.00
+
+class Cappuccino(Bebida):
+    def __init__(self):
+        self.descricao = "Cappuccino"
+    def custo(self):
+        return 8.00
+
+class Cha(Bebida):
+    def __init__(self):
+        self.descricao = "Chá"
+    def custo(self):
+        return 4.00
+
+class Complemento(Bebida, ABC):
+    def __init__(self, bebida):
+        self.bebida = bebida
+    @abstractmethod
+    def get_descricao(self):
+        pass
+
+class Leite(Complemento):
+    def get_descricao(self):
+        return self.bebida.get_descricao() + ", Leite"
+    def custo(self):
+        return self.bebida.custo() + 1.50
+
+class Chantilly(Complemento):
+    def get_descricao(self):
+        return self.bebida.get_descricao() + ", Chantilly"
+    def custo(self):
+        return self.bebida.custo() + 2.00
+
+class Canela(Complemento):
+    def get_descricao(self):
+        return self.bebida.get_descricao() + ", Canela"
+    def custo(self):
+        return self.bebida.custo() + 0.50
+
+class CaldaChocolate(Complemento):
+    def get_descricao(self):
+        return self.bebida.get_descricao() + ", Calda de Chocolate"
+    def custo(self):
+        return self.bebida.custo() + 2.50
+
+from abc import ABC, abstractmethod
+
+if __name__ == "__main__":
+    pedido = None 
+    while pedido is None:
+        escolha = input()
+        if escolha == "Expresso":
+            pedido = Expresso()
+        elif escolha == "Cappuccino":
+            pedido = Cappuccino()
+        elif escolha == "Cha":
+            pedido = Cha()
+        else:
+            print("Erro")
+
+    while True:
+        print(f"{pedido.get_descricao()}")
+        
+        comp = input()
+        if comp == "Leite":
+            pedido = Leite(pedido)
+        elif comp == "Chantilly":
+            pedido = Chantilly(pedido)
+        elif comp == "Canela":
+            pedido = Canela(pedido)
+        elif comp == "Chocolate":
+            pedido = CaldaChocolate(pedido)
+        elif comp == "0":
+            break
+        else:
+            print("Erro")
+
+    print("\n" + "="*30)
+    print(f"{pedido.get_descricao()}")
+    print(f"Valor: R$ {pedido.custo():.2f}")
+    print("="*30)

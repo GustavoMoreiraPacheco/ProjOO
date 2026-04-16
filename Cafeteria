@@ -62,7 +62,7 @@ class CaldaChocolate(Complemento):
 from abc import ABC, abstractmethod
 
 if __name__ == "__main__":
-    pedido = None 
+    pedido = None
     while pedido is None:
         escolha = input()
         if escolha == "Expresso":

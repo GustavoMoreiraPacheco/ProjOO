@@ -1,0 +1,48 @@
+class TV:
+    def ligar(self)
+    def desligar(self)
+
+class Projetor:
+    def ligar(self)
+    def desligar(self)
+
+class Receiver:
+    def ligar(self)
+    def desligar(self)
+
+class PlayerMidia:
+    def ativar (self)
+
+class Som:
+    def alt_vol(self, volume)
+
+class Luz:
+    def ligar(self)
+    def desligar(self)
+
+class HomeTheaterFacade:
+    def __init__(self, tv, projetor, receiver, playermedia, som, luz):
+        self.tv = tv
+        self.projetor = projetor
+        self.receiver = receiver
+        self.playermedia = playermedia
+        self.som = som
+        self.luz = luz
+
+    def assistir_filme(self):
+        self.tv.ligar()
+        self.projetor.ligar()
+        self.receiver.ligar()
+        self.playermedia.ativar()
+        self.som.alt_vol(10)
+        self.luz.desligar()
+
+    def ouvir_musica(self):
+        self.receiver.ligar()
+        self.som.alt_vol(10)
+
+    def encerrar_sessao(self):
+        self.tv.desligar()
+        self.projetor.desligar()
+        self.receiver.desligar()
+        self.luz.ligar()

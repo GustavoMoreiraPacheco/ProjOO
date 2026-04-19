@@ -1,0 +1,85 @@
+from abc import ABC, abstractmethod
+
+class Obs(ABC):
+    @abstractmethod
+    def atlz(self, pcd_nome, data):
+        pass
+
+class Suj(ABC):
+    @abstractmethod
+    def anex(self, obs):
+        pass
+
+    @abstractmethod
+    def desanex(self, obs):
+        pass
+
+    @abstractmethod
+    def notif(self):
+        pass
+
+class PCD(Suj):
+    def __init__(self, nome):
+        self.nome = nome
+        self._obss = []
+        self._dados = {
+            "temp": 30.0,
+            "ph": 7.0,
+            "pa": 1000.00,
+            "ura": 80.0
+        }
+
+    def anex(self, obs):
+        if obs not in self._obss:
+            self._obss.append(obs)
+
+    def desanex(self, obs):
+        self._obss.remove(obs)
+
+    def notif(self):
+        for obs in self._obss:
+            obs.atlz(self.nome, self._dados)
+
+    def atlz_dados(self, temp=None, ph=None, pa=None, ura=None):
+        alt = False
+        if temp is not None and temp != self._dados["temp"]:
+            self._dados["temp"] = temp
+            alt = True
+        if ph is not None and ph != self._dados["ph"]:
+            self._dados["ph"] = ph
+            alt = True
+        if pa is not None and pa != self._dados["pa"]:
+            self._dados["pa"] = pa
+            alt = True
+        if ura is not None and ura != self._dados["ura"]:
+            self._dados["ura"] = ura
+            alt = True
+        
+        if alt:
+            self.notif()
+
+class Universidade(Obs):
+    def __init__(self, nome_uni):
+        self.nome_uni = nome_uni
+
+    def atlz(self, pcd_nome, data):
+        print(f"[{self.nome_uni.upper()}] PCD {pcd_nome}:")
+        print(f"    > Temp: {data['temp']}°C | pH: {data['ph']} | PA: {data['pa']}hPa | URA: {data['ura']}%")
+        
+#Simulação
+
+ufrgs = Universidade("UFRGS")
+ufrj = Universidade("UFRJ")
+unb = Universidade("UNB")
+usp = Universidade("USP")
+
+pcd_amazonas = PCD("Amazonas")
+pcd_tapajos = PCD("Tapajós")
+
+pcd_amazonas.anex(ufrgs)
+pcd_amazonas.anex(usp)
+pcd_tapajos.anex(ufrj)
+pcd_tapajos.anex(unb)
+
+print (pcd_amazonas.atlz_dados(temp=31.5, ph=6.8))
+print (pcd_tapajos.atlz_dados(ura=85.0, pa=1010.0))

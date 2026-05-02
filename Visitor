@@ -1,0 +1,72 @@
+from abc import ABC, abstractmethod
+
+class RelatorioVisitor(ABC):
+    
+    @abstractmethod
+    def visitar_relatorio_a(self, relatorio):
+        pass
+
+    @abstractmethod
+    def visitar_relatorio_b(self, relatorio):
+        pass
+
+class Relatorio(ABC):
+    @abstractmethod
+    def aceitar(self, visitor: RelatorioVisitor):
+        pass
+
+
+class RelatorioA(Relatorio):
+    def __init__(self, dados):
+        self.dados = dados
+
+    def aceitar(self, visitor: RelatorioVisitor):
+        return visitor.visitar_relatorio_a(self)
+
+
+class RelatorioB(Relatorio):
+    def __init__(self, outros_dados):
+        self.outros_dados = outros_dados
+
+    def aceitar(self, visitor: RelatorioVisitor):
+        return visitor.visitar_relatorio_b(self)
+
+
+class PDFVisitor(RelatorioVisitor):
+    
+    def visitar_relatorio_a(self, relatorio):
+        return f"PDF RelatorioA: {relatorio.dados}"
+
+    def visitar_relatorio_b(self, relatorio):
+        return f"PDF RelatorioB: {relatorio.outros_dados}"
+
+
+class HTMLVisitor(RelatorioVisitor):
+    
+    def visitar_relatorio_a(self, relatorio):
+        return f"<html><body><h1>A</h1>{relatorio.dados}</body></html>"
+
+    def visitar_relatorio_b(self, relatorio):
+        return f"<html><body><h1>B</h1>{relatorio.outros_dados}</body></html>"
+
+
+class PlanilhaVisitor(RelatorioVisitor):
+    
+    def visitar_relatorio_a(self, relatorio):
+        return f"Planilha(A): {relatorio.dados}"
+
+    def visitar_relatorio_b(self, relatorio):
+        return f"Planilha(B): {relatorio.outros_dados}"
+
+
+relatorios = [
+    RelatorioA("dados importantes"),
+    RelatorioB("outros dados")
+]
+
+pdf = PDFVisitor()
+html = HTMLVisitor()
+
+for r in relatorios:
+    print(r.aceitar(pdf))
+    print(r.aceitar(html))
